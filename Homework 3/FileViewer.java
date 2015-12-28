@@ -12,8 +12,10 @@ public class FileViewer {
 	private static JTree directory;
 	private static DefaultMutableTreeNode root;
 	private static String path;
+	private static int tot = 0;
 
-	// private static TextArea des;
+	// private static TextArea desText;
+	// private static JPanel desPane;
 
 	static void initDir(String ori) {
 		if (ori.length() == 0)
@@ -25,15 +27,14 @@ public class FileViewer {
 		directory = new JTree(root);
 		dirPane = new JScrollPane(directory);
 		dirCon = new JFrame("FileViewer");
-		dirCon.getContentPane().add(dirPane);
-		dirCon.setVisible(true);
-		dirCon.setBounds(80, 80, 400, 600);
-		dirCon.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		dirCon.getContentPane().add(dirPane, BorderLayout.NORTH);
 	}
 
-	static void buildDir(DefaultMutableTreeNode now) {
+	static void buildDir(DefaultMutableTreeNode now, int depth) {
+		if (depth > 10 || ++tot > 200000)
+			return;
+
 		File dir = new File(path);
-		// System.out.println(path);
 		File[] list = dir.listFiles();
 		if (list == null)
 			return;
@@ -44,37 +45,36 @@ public class FileViewer {
 			name[i] += list[i].getName();
 		}
 		Arrays.sort(name);
-		// System.out.println(n);
-		// for (int i = 0; i < n; i++) {
-		// 	System.out.println("sorted---" + name[i].substring(1));
-		// }
-		// if (1 - 1 == 0)
-		// 	return;
 		for (int i = 0; i < n; i++) {
         	if (name[i].indexOf('.') == 1)
         		continue;
 			DefaultMutableTreeNode nf = new DefaultMutableTreeNode(name[i].substring(1));
 			String tmp = path;
 			path += File.separator + name[i].substring(1);
-        	// System.out.println(path);
-			buildDir(nf);
+			buildDir(nf, depth + 1);
 			path = tmp;
 			now.add(nf);
         }
 	}
 
-	// static void initDes() {
-	// 	des = new TextArea("Info\n");
-	// 	dirCon.getContentPane().add(des);
-	// 	dirCon.setVisible(true);
-	// }
+	private static TextArea desText;
+	private static JScrollPane desPane;
+
+	static void initDes() {
+		desText = new TextArea("Info\n");
+		desPane = new JScrollPane(desText);
+		dirCon.getContentPane().add(desPane, BorderLayout.SOUTH);
+		dirCon.setVisible(true);
+		dirCon.setBounds(80, 80, 400, 600);
+		dirCon.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+	}
 
 	public static void main(String args[]) {
 		if (args.length == 0)
 			initDir((File.listRoots())[0].getName());
 		else
 			initDir(args[0]);
-		buildDir(root);
-		// initDes();
+		buildDir(root, 0);
+		initDes();
 	}
 }
