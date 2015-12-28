@@ -92,6 +92,8 @@ public class FileViewer {
 				desText.append("Type:\t" + "other" + '\n');
 			desText.append("Size(byte):\t" + f.length() + '\n');
 			desText.append("Last modified:\t" + new Date(f.lastModified()) + '\n');
+			desText.append("\n\n\n\n\n\nYou can specify the path as a parameter when start the app.\n");
+			desText.append("Like: java FileViewer /home/usr/Desktop\n");
 		}
 		public void valueChanged(TreeSelectionEvent e){
 			DefaultMutableTreeNode node = (DefaultMutableTreeNode)directory.getLastSelectedPathComponent();
