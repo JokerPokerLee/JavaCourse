@@ -15,11 +15,9 @@ public class FileViewer {
 	private static int tot = 0;
 
 	static void initDir(String ori) {
-		if (ori.length() == 0)
-			ori += File.separator;
-		if (ori.substring(ori.length() - File.separator.length(), ori.length() - 1) == File.separator)
-			ori = ori.substring(0, ori.length() - File.separator.length());
 		path = ori;
+		if (path.length() == 0 || !path.substring(path.length() - 1, path.length()).equals(File.separator))
+			path += File.separator;
 		root = new DefaultMutableTreeNode(path);
 		directory = new JTree(root);
 		dirPane = new JScrollPane(directory);
@@ -28,9 +26,8 @@ public class FileViewer {
 	}
 
 	static void buildDir(DefaultMutableTreeNode now, int depth) {
-		if (depth > 10 || ++tot > 180000)
+		if (depth > 10 || ++tot > 150000)
 			return;
-
 		File dir = new File(path);
 		File[] list = dir.listFiles();
 		if (list == null)
@@ -47,7 +44,7 @@ public class FileViewer {
         		continue;
 			DefaultMutableTreeNode nf = new DefaultMutableTreeNode(name[i].substring(1));
 			String tmp = path;
-			path += File.separator + name[i].substring(1);
+			path += name[i].substring(1) + File.separator;
 			buildDir(nf, depth + 1);
 			path = tmp;
 			now.add(nf);
