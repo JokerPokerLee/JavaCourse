@@ -69,12 +69,28 @@ public class FileViewer {
 		dirCon.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 	}
 
+	private static class listener implements TreeSelectionListener{
+		private static String dfs(DefaultMutableTreeNode now) {
+			String str = now.toString();
+			if (now == root)
+				return str.substring(0, str.length() - File.separator.length());
+			return dfs((DefaultMutableTreeNode)now.getParent()) + File.separator + str;
+		}
+		public void valueChanged(TreeSelectionEvent e){
+			DefaultMutableTreeNode node = (DefaultMutableTreeNode)directory.getLastSelectedPathComponent();
+			String name = dfs(node);
+			System.out.println(name);
+			// File f = new File(dfs(node));
+		}
+	}
+
 	public static void main(String args[]) {
 		if (args.length == 0)
 			initDir((File.listRoots())[0].getName());
 		else
 			initDir(args[0]);
 		buildDir(root, 0);
+		directory.addTreeSelectionListener(new listener());
 		initDes();
 	}
 }
