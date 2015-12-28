@@ -3,3 +3,17 @@ My Java Project
 Homework 1: Guess Word
 
 Homework 2: Linklist
+
+Homework 3: FileViewer
+
+    A simple app for viewing the hierarchy of the file system. Meanwhile, it
+    provide details of the file or directory whichever you click.
+
+    The app use the top most directory of the partition as default root of
+    the hierarchy tree. User can also specify the path and pass it as  a
+    parameter when refer the app.
+
+    Due to the limited memory space, the maximum number of files is set as
+    150000 and the maximum of the depth of the tree is set as 10.
+
+    It can work well on both Linux and Windows.
