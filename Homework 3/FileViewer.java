@@ -18,6 +18,11 @@ public class FileViewer {
 		path = ori;
 		if (path.length() == 0 || !path.substring(path.length() - 1, path.length()).equals(File.separator))
 			path += File.separator;
+		if (!(new File(path)).exists())
+		{
+			System.out.println("No such directory.");
+			System.exit(-1);
+		}
 		root = new DefaultMutableTreeNode(path);
 		directory = new JTree(root);
 		dirPane = new JScrollPane(directory);
