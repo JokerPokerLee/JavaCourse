@@ -14,9 +14,6 @@ public class FileViewer {
 	private static String path;
 	private static int tot = 0;
 
-	// private static TextArea desText;
-	// private static JPanel desPane;
-
 	static void initDir(String ori) {
 		if (ori.length() == 0)
 			ori += File.separator;
@@ -31,7 +28,7 @@ public class FileViewer {
 	}
 
 	static void buildDir(DefaultMutableTreeNode now, int depth) {
-		if (depth > 10 || ++tot > 200000)
+		if (depth > 10 || ++tot > 180000)
 			return;
 
 		File dir = new File(path);
@@ -57,14 +54,15 @@ public class FileViewer {
         }
 	}
 
-	private static TextArea desText;
+	private static JTextArea desText;
 	private static JScrollPane desPane;
 
 	static void initDes() {
-		desText = new TextArea("Info\n");
+		desText = new JTextArea("Info\n");
 		desPane = new JScrollPane(desText);
-		dirCon.getContentPane().add(desPane, BorderLayout.SOUTH);
+		dirCon.getContentPane().add(desPane);
 		dirCon.setVisible(true);
+		dirCon.setResizable(false);
 		dirCon.setBounds(80, 80, 400, 600);
 		dirCon.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 	}
@@ -76,11 +74,27 @@ public class FileViewer {
 				return str.substring(0, str.length() - File.separator.length());
 			return dfs((DefaultMutableTreeNode)now.getParent()) + File.separator + str;
 		}
+		private static void display(File f) {
+			int ty = -1;
+			if (f.isFile() == true)
+				ty = 0;
+			if (f.isDirectory() == true)
+				ty = 1;
+			desText.setText(null);
+			desText.append("Information\n");
+			desText.append("Name:\t" + f.getName() + '\n');
+			desText.append("Path:\t" + f.getPath() + '\n');
+			if (ty >= 0)
+				desText.append("Type:\t" + (ty == 0 ? "file" : "directory") + '\n');
+			else
+				desText.append("Type:\t" + "other" + '\n');
+			desText.append("Size(byte):\t" + f.length() + '\n');
+			desText.append("Last modified:\t" + new Date(f.lastModified()) + '\n');
+		}
 		public void valueChanged(TreeSelectionEvent e){
 			DefaultMutableTreeNode node = (DefaultMutableTreeNode)directory.getLastSelectedPathComponent();
 			String name = dfs(node);
-			System.out.println(name);
-			// File f = new File(dfs(node));
+			display(new File(dfs(node)));
 		}
 	}
 
