@@ -17,3 +17,11 @@ Homework 3: FileViewer
     150000 and the maximum of the depth of the tree is set as 10.
 
     It can work well on both Linux and Windows.
+
+Final exam: FlipGame
+
+    An n*m(user specify) size chess board. Each grid initilly painted black
+    or white. When one grid is clicked, the color of this grid and the grids
+    which share an edge with this grid will change their current color.
+
+    The player wins when all the grids are in the same color.
