@@ -1,0 +1,7 @@
+2016-01-17
+
+Window size fixed. Upper part for (n, m) input, fixed. Lower part display for board, fixed.
+
+When readin (n, m), resize the board and make it locate in center of the window.
+
+When resize board, the grid size can not larger than 10. 
