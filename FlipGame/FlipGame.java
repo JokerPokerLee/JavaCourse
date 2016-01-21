@@ -8,19 +8,20 @@ class MyWindow extends JFrame implements ActionListener {
 
 	int WIDE = 800, HIGH = 800;		//full window size
 	final int MARGIN = 20;				//shortest length of margin
-	final int LENGTH = 10;				//shortest length of grid
+	final int LENGTH = 100;				//shortest length of grid
 	final int ox = 10, oy = 10;
 	final int len = 100;
 
 	Container con = getContentPane();
 	JButton[] grid;
+    int tot = 0;
 
 	JTextField rowCon, columnCon;
 	JLabel rowLab, columnLab;
 	JButton confirm;
 
     int sta[];
-	int n, m;
+    int n, m;
 
 	MyWindow(String s) {
 
@@ -66,6 +67,14 @@ class MyWindow extends JFrame implements ActionListener {
 
 	void Paint() {
 
+        if (tot > 0) {
+            for (int i = 0; i < tot; i++)
+                con.remove(grid[i]);
+            revalidate();
+            repaint();
+            tot = 0;
+        }
+
 		int len = LENGTH;
 		if ((WIDE - 2 * MARGIN) / m < len)
 			len = (WIDE - 2 * MARGIN) / m;
@@ -76,33 +85,25 @@ class MyWindow extends JFrame implements ActionListener {
 		ox = (WIDE - m * len) / 2;
 		oy = (HIGH - n * len) / 2;
 
-        /*
-        System.out.println(ox + " " + oy + " " + len);
-        JButton tmp = new JButton("test");
-        tmp.setBounds(ox, oy, 100, 100);
-        con.add(tmp);
-        validate();
-        if (1 == 1)
-            return;
-        */
-
-		int tot = n * m;
-		for (int i = 0; i < 1; i++) {
+		tot = n * m;
+        grid = new JButton[tot];
+		for (int i = 0; i < tot; i++) {
 			int x = i / m;
 			int y = i % m;
+            grid[i] = new JButton("");
+			grid[i].setBounds(ox + len * x, oy + len * y, len, len);
             grid[i].addActionListener(this);
-			//grid[i].setBounds(ox + len * x, oy + len * y, len, len);
-            //grid[i].addActionListener(this);
-			//con.add(grid[i]);
+			con.add(grid[i]);
 		}
-        
+
         setVisible(true);
 		validate();
 
-        //for (int i = 0; i < tot; i++) {
-        //    sta[i] = Math.random() > 0.5 ? 1 : 0;
-        //    grid[i].setBackground(sta[i] == 1 ? Color.white : Color.black);
-        //}
+        sta = new int[tot];
+        for (int i = 0; i < tot; i++) {
+            sta[i] = Math.random() > 0.5 ? 1 : 0;
+            grid[i].setBackground(sta[i] == 1 ? Color.white : Color.black);
+        }
 	}
 
     private void flip(int k) {
