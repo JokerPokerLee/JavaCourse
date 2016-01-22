@@ -6,29 +6,31 @@ import javax.swing.*;
 
 class MyWindow extends JFrame implements ActionListener {
 
-	int WIDE = 800, HIGH = 800;		//full window size
-	final int MARGIN = 20;				//shortest length of margin
-	final int LENGTH = 100;				//shortest length of grid
-	final int ox = 10, oy = 10;
-	final int len = 100;
+	final int WIDE = 800, HIGH = 600;		    //full window size
+	final int MARGIN = 50;				        //shortest length of margin of the lower board
+    final int LENGTH = 50;                      //maximum length of grids side
+    int UPPER;                                  //the length of upper components it is determined by the size of the label and the button
 
 	Container con = getContentPane();
-	JButton[] grid;
-    int tot = 0;
 
 	JTextField rowCon, columnCon;
 	JLabel rowLab, columnLab;
 	JButton confirm;
 
-    int sta[];
-    int n, m;
+	JButton[] grid;
+    int sta[], n, m, tot = 0;
+    //board info
+    //the board is divided into n*m grid store in the array grid as JButton component
+    //tot = n * m whether board exists can be known from tot value (zero or not)
 
 	MyWindow(String s) {
 
 		super(s);
 
-        int len = 50, tal = 20, sep = 5, bias = 21;
+        int len = 50, tal = 20, sep = 20, bias = 21;
+        //the width of lab is len, the width of button is len * 2
         int L = (WIDE - len * 8 - sep * 4) / 2;
+        UPPER = sep + tal;
 
 		rowLab = new JLabel("Row");
         rowLab.setBounds(L + bias, sep, len, tal);
@@ -61,8 +63,6 @@ class MyWindow extends JFrame implements ActionListener {
 		setVisible(true);
 		validate();
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-
-        WIDE -= tal + sep * 2;
 	}
 
 	void Paint() {
@@ -78,18 +78,18 @@ class MyWindow extends JFrame implements ActionListener {
 		int len = LENGTH;
 		if ((WIDE - 2 * MARGIN) / m < len)
 			len = (WIDE - 2 * MARGIN) / m;
-		if ((HIGH - 2 * MARGIN) / n < len)
+		if ((HIGH - 2 * MARGIN - UPPER) / n < len)
 			len = (HIGH - 2 * MARGIN) / n;
 
 		int ox, oy;
 		ox = (WIDE - m * len) / 2;
-		oy = (HIGH - n * len) / 2;
+		oy = (HIGH - n * len - UPPER) / 2 + UPPER;
 
 		tot = n * m;
         grid = new JButton[tot];
 		for (int i = 0; i < tot; i++) {
-			int x = i / m;
-			int y = i % m;
+			int x = i % m;
+			int y = i / m;
             grid[i] = new JButton("");
 			grid[i].setBounds(ox + len * x, oy + len * y, len, len);
             grid[i].addActionListener(this);
